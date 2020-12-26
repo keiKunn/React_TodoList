@@ -26,7 +26,7 @@ class App extends React.Component {
     }
 
     this.state.tasks.push(newTask);
-    this.setState({ tasks: tasks });
+    this.setState({ tasks });
   }
 
   render() {
