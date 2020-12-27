@@ -7,6 +7,7 @@ class App extends React.Component {
       tasks: []
     };
     this.addTask = this.addTask.bind(this); // ？：this.addTaskと宣言する理由 > render内のonClickで{this.addTask}と、したいため。また、そうすることでコンポーネント内のstateも利用できる。
+    this.deleteTask = this.deleteTask.bind(this);
   }
 
   /**
@@ -27,6 +28,21 @@ class App extends React.Component {
 
     this.state.tasks.push(newTask);
     this.setState({ tasks });
+  }
+
+  /**
+  * タスク削除機能
+  */
+  deleteTask(id) {
+    let tasksCopy = this.state.tasks.slice();
+    // 選択されたタスクをstateから削除 
+    tasksCopy.splice(id, 1);
+    // IDの振り直し
+    tasksCopy.forEach((obj, idx) => {
+      obj.id = idx;
+    });
+    // 再レンダリング
+    this.setState({ tasks: tasksCopy });
   }
 
   render() {
@@ -54,7 +70,7 @@ class App extends React.Component {
                         <td>{obj.id}</td>
                         <td>{obj.comment}</td>
                         <td><button type='button'>{obj.status}</button></td>
-                        <td><button type='button'>削除</button></td>
+                        <td><button type='button' onClick={(e) => this.deleteTask(obj.id, e)}>削除</button></td>
                       </tr>
               })
             }
