@@ -6,14 +6,14 @@ class App extends React.Component {
     this.state = {
       tasks: []
     };
-    this.addTask = this.addTask.bind(this); // ？：this.addTaskと宣言する理由 > render内のonClickで{this.addTask}と、したいため。また、そうすることでコンポーネント内のstateも利用できる。
     this.deleteTask = this.deleteTask.bind(this);
   }
 
   /**
   * タスク追加機能
+  * 学習メモ：renderでのthisを固定化(コンポーネントの関数を指定)するために、アロー関数で定義
   */
-  addTask() {
+  addTask = () => {
     const tasks = this.state.tasks; // ★今のstate状態を取得
     const inputTask = document.getElementById('addForm').value;
     if (!inputTask) {
@@ -32,16 +32,17 @@ class App extends React.Component {
 
   /**
   * タスク削除機能
+  * 学習メモ：render内でのアロー関数は、レンダリングする度に関数が定義されてしまうため非推奨。
+  *          →関数を返却する関数を定義し、そこに引数-idを持たせる。
   */
-  deleteTask(id) {
-    let tasksCopy = this.state.tasks.slice();
+  deleteTask = (id) => () => {
+    const tasksCopy = this.state.tasks.slice();
     // 選択されたタスクをstateから削除 
     tasksCopy.splice(id, 1);
     // IDの振り直し
     tasksCopy.forEach((obj, idx) => {
       obj.id = idx;
     });
-    // 再レンダリング
     this.setState({ tasks: tasksCopy });
   }
 
@@ -70,7 +71,7 @@ class App extends React.Component {
                         <td>{obj.id}</td>
                         <td>{obj.comment}</td>
                         <td><button type='button'>{obj.status}</button></td>
-                        <td><button type='button' onClick={(e) => this.deleteTask(obj.id, e)}>削除</button></td>
+                        <td><button type='button' onClick={this.deleteTask(obj.id)}>削除</button></td>
                       </tr>
               })
             }
