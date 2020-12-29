@@ -6,7 +6,6 @@ class App extends React.Component {
     this.state = {
       tasks: []
     };
-    this.deleteTask = this.deleteTask.bind(this);
   }
 
   /**
