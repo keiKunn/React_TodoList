@@ -65,8 +65,8 @@ class App extends React.Component {
               <th>状態</th>
             </tr>
             {
-              this.state.tasks.map(obj => {
-                return <tr>
+              this.state.tasks.map((obj, index) => {
+                return <tr key={index}>
                         <td>{obj.id}</td>
                         <td>{obj.comment}</td>
                         <td><button type='button'>{obj.status}</button></td>
