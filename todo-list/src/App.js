@@ -45,6 +45,20 @@ class App extends React.Component {
     this.setState({ tasks: tasksCopy });
   }
 
+  /**
+  * タスク状態変更機能
+  */
+  changeStatus = (id) => () => {
+    const tasksCopy = this.state.tasks.slice();
+    const oldStatus = tasksCopy[id].status;
+    if (oldStatus === '作業中') {
+      tasksCopy[id].status = '完了';
+    } else {
+      tasksCopy[id].status = '作業中';
+    }
+    this.setState({ tasks: tasksCopy });
+  }
+
   render() {
     return (
       <div>
@@ -65,12 +79,12 @@ class App extends React.Component {
               <th>状態</th>
             </tr>
             {
-              this.state.tasks.map((obj, index) => {
+              this.state.tasks.map((task, index) => {
                 return <tr key={index}>
-                        <td>{obj.id}</td>
-                        <td>{obj.comment}</td>
-                        <td><button type='button'>{obj.status}</button></td>
-                        <td><button type='button' onClick={this.deleteTask(obj.id)}>削除</button></td>
+                        <td>{task.id}</td>
+                        <td>{task.comment}</td>
+                        <td><button type='button' onClick={this.changeStatus(task.id)}>{task.status}</button></td>
+                        <td><button type='button' onClick={this.deleteTask(task.id)}>削除</button></td>
                       </tr>
               })
             }
