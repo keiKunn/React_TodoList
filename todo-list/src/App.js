@@ -4,6 +4,7 @@ class App extends React.Component {
   constructor(props) {
     super(props);
     this.state = {
+      radioBtn: "すべて",
       tasks: []
     };
   }
@@ -59,16 +60,41 @@ class App extends React.Component {
     this.setState({ tasks: tasksCopy });
   }
 
+  /**
+  * ラジオボタン 表示切替機能
+  */
+  changeDisplay = (e) => {
+    const choicedBtn = e.target.value;
+    // 表示切替
+    let radioBtnState;
+    if (choicedBtn === 'all-radio-value') {
+      radioBtnState = 'すべて';
+    } else if (choicedBtn === 'work-radio-value') {
+      radioBtnState = '作業中';
+    } else if (choicedBtn === 'done-radio-value') {
+      radioBtnState = '完了';
+    }
+    // 表示タスクをset
+    this.setState({ radioBtn: radioBtnState });
+  }
+
   render() {
+    // ラジオボタンの選択反映
+    const tasks = this.state.tasks;
+    const radioBtn = this.state.radioBtn;
+    const displayTasks = tasks.filter(task => {
+      return (radioBtn === 'すべて') || (task.status === radioBtn)
+    });
+
     return (
       <div>
         <h1>ToDoリスト1</h1>
         <div id="radio-area-id">
-          <input type="radio" id="all-radio-id" name="todo-radio-name" value="all-radio-value" checked />
+          <input type="radio" id="all-radio-id" name="todo-radio-name" value="all-radio-value" checked={radioBtn === 'すべて'} onChange={this.changeDisplay} />
           <label htmlFor="all_radio_id">すべて</label>
-          <input type="radio" id="work-radio-id" name="todo-radio-name" value="work-radio-value" />
+          <input type="radio" id="work-radio-id" name="todo-radio-name" value="work-radio-value" checked={radioBtn === '作業中'} onChange={this.changeDisplay} />
           <label htmlFor="work_radio_id">作業中</label>
-          <input type="radio" id="done-radio-id" name="todo-radio-name" value="done-radio-value" />
+          <input type="radio" id="done-radio-id" name="todo-radio-name" value="done-radio-value" checked={radioBtn === '完了'} onChange={this.changeDisplay} />
           <label htmlFor="done-radio-id">完了</label>
         </div>
         <table id="task-table-id">
@@ -79,13 +105,13 @@ class App extends React.Component {
               <th>状態</th>
             </tr>
             {
-              this.state.tasks.map((task, index) => {
+              displayTasks.map((displayTask, index) => {
                 return <tr key={index}>
-                        <td>{task.id}</td>
-                        <td>{task.comment}</td>
-                        <td><button type='button' onClick={this.changeStatus(task.id)}>{task.status}</button></td>
-                        <td><button type='button' onClick={this.deleteTask(task.id)}>削除</button></td>
-                      </tr>
+                  <td>{displayTask.id}</td>
+                  <td>{displayTask.comment}</td>
+                  <td><button type='button' onClick={this.changeStatus(displayTask.id)}>{displayTask.status}</button></td>
+                  <td><button type='button' onClick={this.deleteTask(displayTask.id)}>削除</button></td>
+                </tr>
               })
             }
           </tbody>
