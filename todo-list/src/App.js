@@ -82,7 +82,7 @@ class App extends React.Component {
     // ラジオボタンの選択反映
     const tasks = this.state.tasks;
     const radioBtn = this.state.radioBtn;
-    const displayTasks = tasks.filter(task => {
+    const filteredTasks = tasks.filter(task => {
       return (radioBtn === 'すべて') || (task.status === radioBtn)
     });
 
@@ -105,7 +105,7 @@ class App extends React.Component {
               <th>状態</th>
             </tr>
             {
-              displayTasks.map((displayTask, index) => {
+              filteredTasks.map((displayTask, index) => {
                 return <tr key={index}>
                   <td>{displayTask.id}</td>
                   <td>{displayTask.comment}</td>
